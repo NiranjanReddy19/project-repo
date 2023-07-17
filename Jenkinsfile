@@ -6,6 +6,7 @@ agent any
       steps{
         sh 'mvn clean package'
       }
+    }
       post{
         success{
           echo "Archiving the Artifacts"
@@ -18,3 +19,4 @@ agent any
         }
       }
     }
+  }
