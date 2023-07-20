@@ -1,16 +1,15 @@
 pipeline {
-agent any
-
-  stages{
-    stage ('Build'){
-      steps{
+  agent any
+  stages {
+    stage('Clone Repository') {
+      steps {
+        git branch: "master",url: "https://github.com/NiranjanReddy19/project-repo.git"
+      }
+    }
+    stage('build'){
+      steps {
         sh 'mvn clean package'
       }
     }
-      stage('Deploy to tomcat server') {
-        steps{
-          deploy adapters: [tomcat9(credentialsId: 'c1785001-365a-4688-b960-77949dbcb572', path: '', url: 'http://43.204.220.38:8091/')], contextPath: 'hello', war: '**/*.war'
-        }
-      }
-    }
   }
+}
