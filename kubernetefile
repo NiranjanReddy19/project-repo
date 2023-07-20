@@ -8,13 +8,13 @@ checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], user
 }
 stage('Docker Image Build'){
 steps{
-sh 'docker build -t niranjanreddy1996/file1 .'
+sh 'docker build -t niranjanreddy1996/hello .'
 }
 }
 stage('Push to Dockerhub'){
 steps{
 sh 'docker login -u niranjanreddy1996 -p Niranjan@96'
-sh 'docker push niranjanreddy1996/file1'
+sh 'docker push niranjanreddy1996/hello'
 }
 }
 stage('Deploy to k8s'){
