@@ -1,9 +1,17 @@
 pipeline{
 agent any
+tools{
+maven 'maven-3'
+}
 stages{
 stage('GIT'){
 steps{
 checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/NiranjanReddy19/project-repo.git']]]) 
+}
+}
+stage('Build'){
+steps{
+sh 'mvn clean install package'
 }
 }
 stage('Docker Image Build'){
