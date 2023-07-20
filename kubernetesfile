@@ -1,0 +1,46 @@
+pipeline{
+agent any
+tools{
+maven 'maven-3'
+}
+stages{
+stage('GIT'){
+steps{
+checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/NiranjanReddy19/project-repo.git']]]) 
+}
+}
+stage('Build'){
+steps{
+sh 'mvn clean install package'
+}
+}
+stage('Docker Image Build'){
+steps{
+sh 'docker build -t niranjanreddy1996/file1 .'
+}
+}
+stage('Push to Dockerhub'){
+steps{
+sh 'docker login -u niranjanreddy1996 -p Niranjan@96'
+sh 'docker push niranjanreddy1996/file1'
+}
+}
+stage('Deploy to k8s'){
+steps{
+    sshagent(['k8s']) {
+        sh "scp -o StrictHostKeyChecking=no nodejsapp.yaml ec2-user@13.127.25.199:/home/ec2-user"
+       script{
+            try{
+                sh "ssh ec2-user@13.127.25.199 kubectl apply -f ."
+            }
+            catch(error){
+                //sh "ssh ec2-user@13.127.25.199 kubectl create -f ."
+            }
+        }
+}
+}
+}
+}
+}
+}
+}
